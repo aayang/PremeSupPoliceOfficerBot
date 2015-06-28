@@ -87,7 +87,7 @@ def cop(driver):
 		str2 = req1[0].find_element_by_css_selector("a").get_attribute(HREF)
 
 		if( str1 == str2):
-			if(i == 50):
+			if(i == 3):
 				str1 = "hai"
 			i = i + 1
 			continue
@@ -137,9 +137,8 @@ def cop(driver):
 
 		driver.find_element_by_id("number_v").send_keys(CVV)
 
-
-	req = driver.find_element_by_xpath("//div[@id='cart-cc']/fieldset/p[2]/label/div/ins")
-	req.click()
+	req = driver.find_element_by_id("order_billing_state")
+	req.send_keys(STATE)
 	req.submit()
 
 	end = time.time()
