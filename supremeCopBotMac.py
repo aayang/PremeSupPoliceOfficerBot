@@ -9,18 +9,26 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import Select
 import time
 
-TARGET = "http://www.supremenewyork.com/shop/new"  # login page of aurora student
-CHECKOUT = "https://www.supremenewyork.com/checkout"
+# PARTS YOU SHOULD EDIT
+###########################################
+# Address location of you firefox profile (for autofill)
+FIREFOX_PROFILE =  '/Users/aayang/Library/Application Support/Firefox/Profiles/dpij44wh.default'
+				   # Mac: '/Users/aayang/Library/Application Support/Firefox/Profiles/dpij44wh.default'
 
-#make this an accessory link
+# Make this an accessory link that already exists in the store you dont want to buy
 CHECKOUT_BUFFER = "http://www.supremenewyork.com/shop/accessories/stash-pill-carabiner/red"
 
-CART = "http://www.supremenewyork.com/shop/cart"
+#Keywor
+KEYWORD_ONE = "short"
+KEYWORD_TWO = "white"
+
+# if Item you are trying to buy has a size, then set ITEM_HAS_SIZE to 1, otherwise zero
+ITEM_HAS_SIZE = 1
+SIZE = "small" # Put size that you want; Note that it will buy the next bigger size if specified size is out
 
 
-HREF = "href"
-ITEM = "inner-article"
-
+CUSTOM_AUTOFILL = 1   # Set this to 0 if you dont want to use the firefox autofill plugin
+# your checkout details
 NAME = "Aaron Yang"
 EMAIL = "xxxxxx@yahoo.com"
 TEL = "4126349863"
@@ -34,11 +42,16 @@ EXP_DATE_MONTH = "12"
 EXP_DATE_YEAR = "2017"
 CVV = "420"
 
-CUSTOM_AUTOFILL = 1
 
-KEYWORD_ONE = "short"
-KEYWORD_TWO = "white"
-SIZE = "small" #put "any" for any size going from smallest to largest
+
+# DON'T EDIT THIS
+###########################################
+TARGET = "http://www.supremenewyork.com/shop/new"  # login page of aurora student
+CHECKOUT = "https://www.supremenewyork.com/checkout"
+CART = "http://www.supremenewyork.com/shop/cart"
+
+HREF = "href"
+ITEM = "inner-article"
 
 def bufferCheckout(driver):
 	driver.get(CHECKOUT_BUFFER)
@@ -55,7 +68,8 @@ def bufferCheckout(driver):
 def selectSize(driver):
 
 	#pick size and check if checkout button is there to checkout
-	driver.find_element_by_id("size").send_keys(SIZE)
+	if ITEM_HAS_SIZE:
+		driver.find_element_by_id("size").send_keys(SIZE)
 	driver.find_element_by_id("add-remove-buttons").find_element_by_class_name("button").click()
 	driver.find_element_by_partial_link_text("checkout")
 	driver.get(CHECKOUT)
@@ -87,7 +101,7 @@ def cop(driver):
 		str2 = req1[0].find_element_by_css_selector("a").get_attribute(HREF)
 
 		if( str1 == str2):
-			if(i == 3):
+			if(i == 3):    #if you are not testing, take out the if statement str1, and increment
 				str1 = "hai"
 			i = i + 1
 			continue
@@ -147,7 +161,7 @@ def cop(driver):
 if __name__ == '__main__':
 
 	#define the driver to use the special firefox settings
-	fp = webdriver.FirefoxProfile('/Users/aayang/Library/Application Support/Firefox/Profiles/dpij44wh.default')
+	fp = webdriver.FirefoxProfile(FIREFOX_PROFILE)
 	driver = webdriver.Firefox(fp)
 	driver.implicitly_wait(10)
 
